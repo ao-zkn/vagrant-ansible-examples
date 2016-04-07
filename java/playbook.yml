@@ -1,0 +1,48 @@
+---
+- hosts: vagrants
+  become: true
+
+  vars:
+    java_download: http://download.oracle.com/otn-pub/java/jdk/8u77-b03/jdk-8u77-linux-i586.tar.gz
+    java_name: jdk1.8.0_77
+    download_directory: /opt/download
+    java_archive: "{{ download_directory }}/{{ java_name }}.tar.gz"
+    java_directory: /usr/java/
+    java_link: "{{ java_directory }}/default"
+
+  tasks:
+    - name: Install wget
+      yum: name=wget state=latest
+
+    - name: Install ld-linux.so.2
+      yum: name=ld-linux.so.2 state=latest
+
+    - name: Create Download directory
+      file: state=directory path={{ download_directory }}
+
+    - name: Download Java
+      get_url: url={{ java_download }} dest={{ java_archive }} headers='Cookie:gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
+
+    - name: Extract Java archive
+      unarchive: src={{ java_archive }} dest={{ download_directory }} copy=no creates={{ download_directory }}/{{ java_name }}
+
+    - name: Create Java directory
+      file: state=directory path={{ java_directory }}
+
+    - name: Move Java to final directory
+      command: mv {{ download_directory }}/{{ java_name }} {{ java_directory }}
+
+    - name: Fix ownership
+      file: state=directory path={{ java_directory }}/{{ java_name }} owner=root group=root recurse=yes
+
+    - name: Create symbolic link
+      file: dest={{ java_link }} src={{ java_directory }}/{{ java_name }} state=link
+
+    - name: Set JAVA_HOME
+      shell: echo 'export JAVA_HOME={{ java_link }}' >> /etc/profile.d/java.sh
+
+    - name: Set Path
+      shell: echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile.d/java.sh
+
+    - name: Source command
+      shell: source /etc/profile.d/java.sh
