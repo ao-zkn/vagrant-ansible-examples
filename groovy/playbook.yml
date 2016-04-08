@@ -9,7 +9,7 @@
     groovy_download: https://dl.bintray.com/groovy/maven/apache-groovy-binary-2.4.6.zip
     groovy_name: groovy-2.4.6
     groovy_archive: "{{ download_directory }}/{{ groovy_name }}.zip"
-    groovy_directory: /usr/groovy/
+    groovy_directory: /usr/groovy
     groovy_link: "{{ groovy_directory }}/default"
 
   tasks:
