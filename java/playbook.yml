@@ -7,7 +7,7 @@
     java_name: jdk1.8.0_77
     download_directory: /opt/download
     java_archive: "{{ download_directory }}/{{ java_name }}.tar.gz"
-    java_directory: /usr/java/
+    java_directory: /usr/java
     java_link: "{{ java_directory }}/default"
 
   tasks:
