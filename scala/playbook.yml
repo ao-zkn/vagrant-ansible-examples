@@ -1,0 +1,46 @@
+---
+- hosts: vagrants
+  become: true
+
+  vars_files:
+    - java/vars/main.yml
+
+  vars:
+    scala_download: http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.tgz
+    scala_name: scala-2.11.8
+    scala_archive: "{{ download_directory }}/{{ scala_name }}.zip"
+    scala_directory: /usr/scala
+    scala_link: "{{ scala_directory }}/default"
+
+  tasks:
+    - include: java/tasks/main.yml
+
+    - name: Create Download directory
+      file: state=directory path={{ download_directory }}
+
+    - name: Download scala
+      get_url: url={{ scala_download }} dest={{ scala_archive }}
+
+    - name: Extract scala archive
+      unarchive: src={{ scala_archive }} dest={{ download_directory }} copy=no creates={{ download_directory }}/{{ scala_name }}
+
+    - name: Create scala directory
+      file: state=directory path={{ scala_directory }}
+
+    - name: Move scala to final directory
+      command: mv {{ download_directory }}/{{ scala_name }} {{ scala_directory }}
+
+    - name: Fix ownership
+      file: state=directory path={{ scala_directory }}/{{ scala_name }} owner=root group=root recurse=yes
+
+    - name: Create symbolic link
+      file: dest={{ scala_link }} src={{ scala_directory }}/{{ scala_name }} state=link
+
+    - name: Set SCALA_HOME
+      shell: echo 'export SCALA_HOME={{ scala_link }}' >> /etc/profile.d/scala.sh
+
+    - name: Set Path
+      shell: echo 'export PATH=$SCALA_HOME/bin:$PATH' >> /etc/profile.d/scala.sh
+
+    - name: Source command
+      shell: source /etc/profile.d/scala.sh
