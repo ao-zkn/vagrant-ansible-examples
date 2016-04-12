@@ -1,0 +1,6 @@
+---
+- hosts: vagrants
+  become: true
+
+  roles:
+    - java

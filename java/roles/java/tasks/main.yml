@@ -1,4 +1,5 @@
 ---
+
   - name: Install wget
     yum: name=wget state=latest
 
@@ -26,11 +27,8 @@
   - name: Create symbolic link
     file: dest={{ java_link }} src={{ java_directory }}/{{ java_name }} state=link
 
-  - name: Set JAVA_HOME
-    shell: echo 'export JAVA_HOME={{ java_link }}' >> /etc/profile.d/java.sh
-
-  - name: Set Path
-    shell: echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /etc/profile.d/java.sh
+  - name: Register JAVA_HOME JRE_HOME
+    template: src=java.sh dest=/etc/profile.d/java.sh owner=root group=root mode=0744
 
   - name: Source command
     shell: source /etc/profile.d/java.sh
