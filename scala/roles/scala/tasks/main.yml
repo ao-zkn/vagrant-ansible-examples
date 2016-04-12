@@ -1,0 +1,25 @@
+---
+
+  - name: Download scala
+    get_url: url={{ scala_download }} dest={{ scala_archive }}
+
+  - name: Extract scala archive
+    unarchive: src={{ scala_archive }} dest={{ download_directory }} copy=no creates={{ download_directory }}/{{ scala_name }}
+
+  - name: Create scala directory
+    file: state=directory path={{ scala_directory }}
+
+  - name: Move scala to final directory
+    command: mv {{ download_directory }}/{{ scala_name }} {{ scala_directory }}
+
+  - name: Fix ownership
+    file: state=directory path={{ scala_directory }}/{{ scala_name }} owner=root group=root recurse=yes
+
+  - name: Create symbolic link
+    file: dest={{ scala_link }} src={{ scala_directory }}/{{ scala_name }} state=link
+
+  - name: Register SCALA_HOME
+    template: src=scala.sh dest=/etc/profile.d/scala.sh owner=root group=root mode=0744
+
+  - name: Source command
+    shell: source /etc/profile.d/scala.sh

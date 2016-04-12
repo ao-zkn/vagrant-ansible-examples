@@ -1,0 +1,5 @@
+scala_download: http://downloads.lightbend.com/scala/2.11.8/scala-2.11.8.tgz
+scala_name: scala-2.11.8
+scala_archive: "{{ download_directory }}/{{ scala_name }}.zip"
+scala_directory: /usr/scala
+scala_link: "{{ scala_directory }}/default"
