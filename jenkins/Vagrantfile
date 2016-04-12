@@ -1,0 +1,36 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.vm.box = 'ceontos7'
+    config.vm.box_url = "https://atlas.hashicorp.com/centos/boxes/7/versions/1602.02/providers/virtualbox.box"
+
+    config.vm.hostname = "centos7"
+
+    config.vm.network :private_network, ip: "192.168.2.104", virtualbox_intnet: "intnet"
+    config.vm.network :forwarded_port, id: "ssh", guest: 22, host: 2104
+    config.vm.network :forwarded_port, id: "jenkins", guest: 8080, host: 8080
+
+    config.vm.provider "virtualbox" do |v|
+        # VM名称
+        v.name = "jenkins"
+        # GUIモード
+        v.gui = "false"
+        # メモリサイズ
+        v.customize ["modifyvm", :id, "--memory", 1024]
+        # CPU数
+        v.customize ["modifyvm", :id, "--cpus", 1]
+        # ビデオメモリサイズ
+        v.customize ["modifyvm", :id, "--vram", 32]
+        # I/O APIC を有効化
+        v.customize ["modifyvm", :id, "--ioapic", "on"]
+    end
+
+    config.vm.provision "ansible" do |ansible|
+      ansible.playbook = "site.yml"
+      ansible.inventory_path = "hosts"
+      ansible.limit = 'all'
+    end
+end

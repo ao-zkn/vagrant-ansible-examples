@@ -1,0 +1,19 @@
+---
+
+  - name: Get Jenkins repository
+    get_url: url=http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo dest=/etc/yum.repos.d/jenkins.repo
+
+  - name: Set Jenkins repository
+    rpm_key: key=http://pkg.jenkins-ci.org/redhat-stable/jenkins-ci.org.key
+
+  - name: Install jenkins
+    yum: name=jenkins state=latest
+
+  - name: Install libgcc_s.so.1
+    yum: name=libgcc_s.so.1 state=latest
+
+  - name: Set default Java version
+    command: 'alternatives --install "/usr/bin/java" "java" "{{java_link}}/bin/java" 1'
+
+  - name: Start jenkins
+    service: name=jenkins state=running enabled=yes
