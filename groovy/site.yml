@@ -1,0 +1,9 @@
+---
+
+- hosts: vagrants
+  become: true
+
+  roles:
+    - common
+    - java
+    - groovy

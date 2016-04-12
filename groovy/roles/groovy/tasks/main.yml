@@ -1,0 +1,25 @@
+---
+
+  - name: Download Groovy
+    get_url: url={{ groovy_download }} dest={{ groovy_archive }}
+
+  - name: Extract Groovy archive
+    unarchive: src={{ groovy_archive }} dest={{ download_directory }} copy=no creates={{ download_directory }}/{{ groovy_name }}
+
+  - name: Create Groovy directory
+    file: state=directory path={{ groovy_directory }}
+
+  - name: Move Groovy to final directory
+    command: mv {{ download_directory }}/{{ groovy_name }} {{ groovy_directory }}
+
+  - name: Fix ownership
+    file: state=directory path={{ groovy_directory }}/{{ groovy_name }} owner=root group=root recurse=yes
+
+  - name: Create symbolic link
+    file: dest={{ groovy_link }} src={{ groovy_directory }}/{{ groovy_name }} state=link
+
+  - name: Register GROOVY_HOME
+    template: src=groovy.sh dest=/etc/profile.d/groovy.sh owner=root group=root mode=0744
+
+  - name: Source command
+    shell: source /etc/profile.d/groovy.sh
