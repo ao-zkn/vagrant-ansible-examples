@@ -1,0 +1,7 @@
+tomcat_name: apache-tomcat-8.0.33
+tomcat_directory: /opt/tomcat
+tomcat_group: tomcat
+tomcat_user: tomcat
+tomcat_download: http://ftp.yz.yamagata-u.ac.jp/pub/network/apache/tomcat/tomcat-8/v8.0.33/bin/apache-tomcat-8.0.33.tar.gz
+tomcat_archive: "{{ download_directory }}/{{ tomcat_name }}.tar.gz"
+tomcat_link: "{{ tomcat_directory }}/default"

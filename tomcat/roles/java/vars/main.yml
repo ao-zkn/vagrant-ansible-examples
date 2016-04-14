@@ -1,0 +1,5 @@
+java_download: http://download.oracle.com/otn-pub/java/jdk/8u77-b03/jdk-8u77-linux-i586.tar.gz
+java_name: jdk1.8.0_77
+java_archive: "{{ download_directory }}/{{ java_name }}.tar.gz"
+java_directory: /usr/java
+java_link: "{{ java_directory }}/default"

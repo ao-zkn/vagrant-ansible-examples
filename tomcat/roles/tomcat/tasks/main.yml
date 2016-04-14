@@ -1,0 +1,25 @@
+---
+
+  - name: Add group Tomcat
+    group: name={{ tomcat_group }}
+
+  - name: Add user Tomcat
+    user: name={{ tomcat_user }} group={{ tomcat_group }} home={{ tomcat_directory }} createhome=no
+
+  - name: Create Tomcat directory
+    file: state=directory path={{ tomcat_directory }}
+
+  - name: Download Tomcat
+    get_url: url={{ tomcat_download }} dest={{ tomcat_archive }}
+
+  - name: Extract Tomcat archive
+    unarchive: src={{ tomcat_archive }} dest={{ download_directory }} copy=no creates={{ download_directory }}/{{ tomcat_name }}
+
+  - name: Move Tomcat to final directory
+    command: mv {{ download_directory }}/{{ tomcat_name }} {{ tomcat_directory }}
+
+  - name: Fix ownership
+    file: state=directory path={{ tomcat_directory }}/{{ tomcat_name }} owner={{ tomcat_user }} group={{ tomcat_group }} recurse=yes
+
+  - name: Create symbolic link
+    file: dest={{ tomcat_link }} src={{ tomcat_directory }}/{{ tomcat_name }} state=link
