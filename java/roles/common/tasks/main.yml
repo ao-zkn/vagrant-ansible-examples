@@ -1,0 +1,12 @@
+---
+  - name: upgrade all packages
+    yum: name=* state=latest
+
+  - name: Install wget
+    yum: name=wget state=latest
+
+  - name: Install ld-linux.so.2
+    yum: name=ld-linux.so.2 state=latest
+
+  - name: Create Download directory
+    file: state=directory path={{ download_directory }}

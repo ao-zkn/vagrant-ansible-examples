@@ -1,14 +1,5 @@
 ---
 
-  - name: Install wget
-    yum: name=wget state=latest
-
-  - name: Install ld-linux.so.2
-    yum: name=ld-linux.so.2 state=latest
-
-  - name: Create Download directory
-    file: state=directory path={{ download_directory }}
-
   - name: Download Java
     get_url: url={{ java_download }} dest={{ java_archive }} headers='Cookie:gpw_e24=http%3A%2F%2Fwww.oracle.com%2F; oraclelicense=accept-securebackup-cookie'
 
@@ -28,7 +19,7 @@
     file: dest={{ java_link }} src={{ java_directory }}/{{ java_name }} state=link
 
   - name: Register JAVA_HOME JRE_HOME
-    template: src=java.sh dest=/etc/profile.d/java.sh owner=root group=root mode=0744
+    template: src=java.sh.j2 dest=/etc/profile.d/java.sh owner=root group=root mode=0744
 
   - name: Source command
     shell: source /etc/profile.d/java.sh
