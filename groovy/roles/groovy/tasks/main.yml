@@ -19,7 +19,7 @@
     file: dest={{ groovy_link }} src={{ groovy_directory }}/{{ groovy_name }} state=link
 
   - name: Register GROOVY_HOME
-    template: src=groovy.sh dest=/etc/profile.d/groovy.sh owner=root group=root mode=0744
+    template: src=groovy.sh.j2 dest=/etc/profile.d/groovy.sh owner=root group=root mode=0744
 
   - name: Source command
     shell: source /etc/profile.d/groovy.sh

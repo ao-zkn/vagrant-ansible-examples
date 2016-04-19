@@ -1,6 +1,5 @@
 ---
-
-- hosts: vagrants
+- hosts: groovy
   become: true
 
   roles:
