@@ -1,5 +1,5 @@
 ---
-- hosts: vagrants
+- hosts: jenkins
   become: true
 
   roles:
