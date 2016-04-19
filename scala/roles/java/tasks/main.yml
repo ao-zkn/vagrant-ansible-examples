@@ -19,7 +19,7 @@
     file: dest={{ java_link }} src={{ java_directory }}/{{ java_name }} state=link
 
   - name: Register JAVA_HOME JRE_HOME
-    template: src=java.sh dest=/etc/profile.d/java.sh owner=root group=root mode=0744
+    template: src=java.sh.j2 dest=/etc/profile.d/java.sh owner=root group=root mode=0744
 
   - name: Source command
     shell: source /etc/profile.d/java.sh
